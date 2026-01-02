@@ -7,6 +7,12 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/upload-script:/uploadScript
+      - ./nginx/init:/init
+      - certs:/etc/nginx/certs
+    environment:
+      GENERATE_SSL: "true"
+      SSL_SAN: "DNS:example.com, DNS:www.example.com , IP:127.0.0.1"
+    entrypoint: ["/init/start.sh"]
     depends_on:
       - thelounge
     restart: always
@@ -23,3 +29,6 @@ services:
     restart: always
     volumes:
       - ./data:/var/opt/thelounge
+
+volumes:
+  certs:
