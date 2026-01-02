@@ -1,0 +1,25 @@
+services:
+  thelounge_nginx:
+    container_name: thelounge_nginx
+    image: nginx:alpine
+    ports:
+      - 9000:9000
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/upload-script:/uploadScript
+    depends_on:
+      - thelounge
+    restart: always
+  thelounge:
+    image: ghcr.io/lushly7239/thelounge:latest
+    build: thelounge-build/
+    container_name: thelounge
+    # Optional defaults to tetrahydroc/thelounge branch master
+    environment:
+      GIT_REPO: https://github.com/tetrahydroc/thelounge.git
+      GIT_BRANCH: master
+    #ports:
+    #  - "9000:9000"
+    restart: always
+    volumes:
+      - ./data:/var/opt/thelounge
